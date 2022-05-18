@@ -21,10 +21,10 @@ namespace ariel{
             this->visited = false;
         }
         ~Node(){
-            delete next;
-            while (!this->children.empty()){
-                delete this->children.pop_back();
-            }
+//            delete next;
+//            while (!this->children.empty()){
+//                delete this->children.pop_back();
+//            }
         }
 
     };

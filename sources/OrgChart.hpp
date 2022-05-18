@@ -30,16 +30,17 @@ namespace ariel {
 
         friend ostream& operator<<(ostream &out, const OrgChart &Orgchart);
 
-        Iterator& begin_preorder();
-        Iterator& begin_level_order();
-        Iterator& begin_reverse_order();
-        Iterator& end_preorder();
-        Iterator& end_level_order();
-        Iterator& reverse_order();
-        Iterator& begin();
-        Iterator& end();
+        Iterator begin_preorder();
+        Iterator begin_level_order();
+        Iterator begin_reverse_order();
+        Iterator end_preorder();
+        Iterator end_level_order();
+        Iterator reverse_order();
+        Iterator begin();
+        Iterator end();
 
         void BFS();
+        void revBFS();
         void DFS();
     };
 }

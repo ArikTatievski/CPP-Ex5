@@ -18,12 +18,16 @@ namespace ariel{
         }
         ~Iterator(){}
 
-        string operator->() const {
-            return &data->value;
+        string* operator->() const {
+            return &(data->value);
         }
 
-        string operator*() const {
+        string& operator*() const {
             return data->value;
+        }
+
+        Node* operator&() const {
+            return data;
         }
 
         bool operator==(const Iterator& other) const {
