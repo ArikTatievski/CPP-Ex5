@@ -49,66 +49,32 @@ namespace ariel{
     }
 
     Iterator OrgChart::begin_preorder(){
-//        this->DFS();
-//        return *(this->start);
-        return nullptr;
+        this->DFS();
+        return *this->start;
     }
 
     Iterator OrgChart::begin_level_order(){
-//        this->BFS();
-//        return *(this->start);
-        return nullptr;
+        this->BFS();
+        return *this->start;
     }
 
     Iterator OrgChart::begin_reverse_order(){
-//        this->revBFS();
-//        return *(this->start);
-        return nullptr;
+        this->revBFS();
+        return *this->start;
     }
 
-    Iterator OrgChart::end_preorder(){
-//        if(this->over->data == this->start->data){
-//            this->start->data = this->root;
-//            return *(this->over);
-//        }
-//        return *(this->over);
-        return nullptr;
-    }
-    Iterator OrgChart::end_level_order(){
-//        if(this->over->data == this->start->data){
-//            this->start->data = this->root;
-//            return *(this->over);
-//        }
-//        return *(this->over);
-        return nullptr;
-    }
-    Iterator OrgChart::reverse_order(){
-//        if(this->over->data == this->start->data){
-//            this->start->data = this->root;
-//            return *(this->over);
-//        }
-//        return *(this->over);
-        return nullptr;
-    }
+    Iterator OrgChart::end_preorder(){return *this->over;}
+    Iterator OrgChart::end_level_order(){return *this->over;}
+    Iterator OrgChart::reverse_order(){return *this->over;}
 
     Iterator OrgChart::begin(){
-//        if(this->start->data == this->root){
-//            this->BFS();
-//        }
-//        this->start++;
-//        return *(this->start);
-        return nullptr;
+        this->BFS();
+        return *this->start;
     }
-    Iterator OrgChart::end(){
-//        if(this->over->data == this->start->data){
-//            this->start->data = this->root;
-//            return *(this->over);
-//        }
-//        return *(this->over);
-        return nullptr;
-    }
+    Iterator OrgChart::end(){return *this->over;}
 
     void OrgChart::BFS() {
+        this->start->data = root;
         for (unsigned int i = 0; i < this->allNodes.size(); ++i) {
             this->allNodes.at(i)->visited = false;
         }
@@ -143,10 +109,10 @@ namespace ariel{
             Node* curr = q.front();
             nextFix.push_back(curr);
             q.pop();
-            for (unsigned int i = 0; i < curr->children.size(); ++i){
-                if (!curr->children.at(i)->visited){
-                    curr->children.at(i)->visited = true;
-                    q.push(curr->children.at(i));
+            for (int i = curr->children.size()-1; i >= 0 ; --i){
+                if (!curr->children.at((unsigned int)i)->visited){
+                    curr->children.at((unsigned int)i)->visited = true;
+                    q.push(curr->children.at((unsigned int)i));
                 }
             }
         }
@@ -158,8 +124,11 @@ namespace ariel{
                 nextFix.at(0)->next = NULL;
             }
         }
+        this->start->data = nextFix.at(nextFix.size()-1);
+        this->over->data = nextFix.at(0);
     }
     void OrgChart::DFS() {
+        this->start->data = root;
         for (unsigned int i = 0; i < this->allNodes.size(); ++i) {
             this->allNodes.at(i)->visited = false;
         }
@@ -168,11 +137,16 @@ namespace ariel{
         while (!stack.empty()){
             Node* curr = stack.top();
             stack.pop();
-            if(curr->children.size() == 0 && !stack.empty()){
+            if(curr->children.size() == 0 && stack.empty()){
                 curr->next = NULL;
                 this->over->data = curr;
             }
-            else{curr->next = stack.top();}
+            else if(curr->children.size() == 0){
+                curr->next = stack.top();
+            }
+            else{
+                curr->next = curr->children.at(0);
+            }
             for (int i = curr->children.size() - 1; i >= 0; --i){
                 if (!curr->children.at((unsigned) i)->visited){
                     curr->children.at((unsigned) i)->visited = true;

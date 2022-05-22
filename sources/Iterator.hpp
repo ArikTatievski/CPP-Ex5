@@ -22,7 +22,7 @@ namespace ariel{
             return &(data->value);
         }
 
-        string& operator*() const {
+        string operator*() const {
             return data->value;
         }
 
