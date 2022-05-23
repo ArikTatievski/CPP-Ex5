@@ -1,13 +1,6 @@
 #include "doctest.h"
-#include "sources/OrgChart.hpp"
+#include "OrgChart.hpp"
 using namespace ariel;
-
-#include <iostream>
-#include <stdexcept>
-#include <vector>
-#include "Node.hpp"
-using namespace std;
-
 TEST_CASE("add root & sub"){
     OrgChart organization;
     CHECK_NOTHROW(organization.add_root("Chen"));
@@ -20,67 +13,35 @@ TEST_CASE("add root & sub"){
     CHECK_NOTHROW(organization.add_sub("Chen","Adi"));
     CHECK_NOTHROW(organization.add_sub("Edi","Archer"));
     CHECK_NOTHROW(organization.add_sub("Edi","Shaf"));
-    for (int i = 0; i < 20; ++i) {
-        CHECK(1==1);
+}
+TEST_CASE("Operator Check"){
+    OrgChart org;
+    CHECK_THROWS_MESSAGE(org.add_sub("tal", "renana"), "can't add sub before root");
+    CHECK_NOTHROW(org.add_root("dana"));
+    CHECK_NOTHROW(org.add_root("shir"));
+    CHECK_NOTHROW(org.add_sub("shir", "tal"));
+    CHECK_THROWS_MESSAGE(org.add_sub("adi", "sapir"), "employer doesn't exist");
+    CHECK_NOTHROW(org.add_sub("shir", "sapir"));
+    CHECK_NOTHROW(org.add_sub("sapir", "dan"));
+    CHECK_NOTHROW(org.add_sub("dan", "ziv"));
+    CHECK_NOTHROW(org.add_sub("tal", "avi"));
+    CHECK_NOTHROW(org.add_sub("tal", "yossi"));
+    CHECK_NOTHROW(org.add_sub("shir", "ido"));
+    CHECK_NOTHROW(org.add_sub("ziv", "shaked"));
+    CHECK_NOTHROW(org.add_sub("ziv", "ofer"));
+    std::vector<std::string> v = {"shir", "tal", "sapir", "ido", "avi", "yossi", "dan", "ziv", "shaked", "ofer"};
+    size_t i = 0;
+    for(auto it = org.begin_level_order(); it != org.end_level_order(); ++it){
+                CHECK_EQ(*it, v.at(i++));
+    }
+    std::vector<std::string> v2 = {"shaked", "ofer", "ziv", "avi", "yossi", "dan", "tal", "sapir", "ido", "shir"};
+    i = 0;
+    for(auto it = org.begin_reverse_order(); it != org.reverse_order(); ++it){
+                CHECK_EQ(*it, v2.at(i++));
+    }
+    std::vector<std::string> v3 = {"shir", "tal", "avi", "yossi", "sapir", "dan", "ziv", "shaked", "ofer", "ido"};
+    i = 0;
+    for(auto it = org.begin_preorder(); it != org.end_preorder(); ++it){
+                CHECK_EQ(*it, v3.at(i++));
     }
 }
-//TEST_CASE("Iterators"){
-//    OrgChart organization;
-//    organization.add_root("CEO")
-//            .add_sub("CEO", "CTO")         // Now the CTO is subordinate to the CEO
-//            .add_sub("CEO", "CFO")         // Now the CFO is subordinate to the CEO
-//            .add_sub("CEO", "COO")         // Now the COO is subordinate to the CEO
-//            .add_sub("CTO", "VP_SW") // Now the VP Software is subordinate to the CTO
-//            .add_sub("COO", "VP_BI");      // Now the VP_BI is subordinate to the COO
-//    vector<string> levelOrderAns={"CEO","CTO","CFO","COO","VP_SW","VP_BI"};
-//    unsigned int i =0;
-//    for (auto it = organization.begin_level_order(); it != organization.end_level_order(); ++it){
-//        Node* curr = (&it);
-//        CHECK(curr->value == levelOrderAns.at(i++));
-//    }
-//    vector<string> revOrderAns={"VP_SW","VP_BI","CTO","CFO","COO","CEO"};
-//    for (int j = 0; j < 12; ++j) {
-//        CHECK_NOTHROW(Node* check = new Node("test"));
-//    }
-//    i=0;
-//    for (auto it=organization.begin_reverse_order(); it!=organization.reverse_order(); ++it) {
-//        Node* curr = (&it);
-//        CHECK(curr->value == revOrderAns.at(i++));
-//    }
-//    vector<string> preOrderOrder={"CEO","CTO","VP_SW","CFO","COO","VP_BI"};
-//    i=0;
-//    for (auto it=organization.begin_preorder(); it!=organization.end_preorder(); ++it) {
-//        Node* curr = (&it);
-//        CHECK(curr->value == preOrderOrder.at(i++));
-//    }
-////    for (int j = 0; j < 500; ++j) {
-////        CHECK("cat"=="cat");
-////    }
-//
-//}
-//
-//TEST_CASE("draft"){
-//    OrgChart organization;
-//    organization.add_root("CEO")
-//            .add_sub("CEO", "CTO")         // Now the CTO is subordinate to the CEO
-//            .add_sub("CEO", "CFO")         // Now the CFO is subordinate to the CEO
-//            .add_sub("CEO", "COO")         // Now the COO is subordinate to the CEO
-//            .add_sub("CTO", "VP_SW") // Now the VP Software is subordinate to the CTO
-//            .add_sub("COO", "VP_BI");      // Now the VP_BI is subordinate to the COO
-//
-//    for (auto it = organization.begin_level_order(); it != organization.end_level_order(); ++it)
-//    {
-//        cout << (*it) << " " ;
-//    }
-//    cout <<""<< endl;
-//
-//    for (auto it = organization.begin_reverse_order(); it != organization.reverse_order(); ++it)
-//    {
-//        cout << (*it) << " " ;
-//    } // prints: VP_SW VP_BI CTO CFO COO CEO
-//    cout <<""<< endl;
-//    for (auto it=organization.begin_preorder(); it!=organization.end_preorder(); ++it) {
-//        cout << (*it) << " " ;
-//    }  // prints: CEO CTO VP_SW CFO COO VP_BI
-//    cout <<""<< endl;
-//}
