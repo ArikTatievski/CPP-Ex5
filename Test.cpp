@@ -5,6 +5,11 @@ TEST_CASE("add root & sub"){
     OrgChart organization;
     CHECK_NOTHROW(organization.add_root("Chen"));
     CHECK_THROWS(organization.add_sub("Random", "Arik")); // "Random" doesn't exist in the OrgChart
+    CHECK_THROWS(organization.add_sub("Chen", "")); 
+    CHECK_THROWS(organization.add_sub("Chen", " ")); 
+    CHECK_THROWS(organization.add_sub("Chen", "\r")); 
+    CHECK_THROWS(organization.add_sub("Chen", "\t")); 
+    CHECK_THROWS(organization.add_sub("Chen", "\n")); 
     CHECK_NOTHROW(organization.add_root("Arik")); // replace the root from "Chen" to "Aik"
     CHECK_NOTHROW(organization.add_sub("Arik","Edi"));
     CHECK_NOTHROW(organization.add_sub("Arik","Chen"));
